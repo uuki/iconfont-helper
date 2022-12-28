@@ -1,0 +1,71 @@
+{
+  "name": "iconfont-helper",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "bin": {
+    "iconfont-helper": "lib/cli.js"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "start": "node lib/index.js",
+    "watch": "tsbb watch --disable-babel -f src/index.ts -f src/cli.ts",
+    "build": "tsbb build --disable-babel -f src/index.ts -f src/cli.ts",
+    "example": "node test/example/index.js",
+    "pretest": "npm run example",
+    "checked": "tsc --noEmit",
+    "test": "tsbb test",
+    "coverage": "tsbb test --coverage"
+  },
+  "author": "uuki <uuki.dev@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uuki/iconfont-helper.git"
+  },
+  "keywords": [
+    "webfont",
+    "font",
+    "icon",
+    "iconfont",
+    "font-cli",
+    "ttf",
+    "woff",
+    "eot",
+    "svg",
+    "ttf2eot",
+    "ttf2woff",
+    "ttf2svg",
+    "svg2ttf",
+    "css"
+  ],
+  "license": "MIT",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "engines": {
+    "node": "^12.13.0 || ^14.15.0 || >=15.0.0"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/test/*.test.{js,ts}"
+    ]
+  },
+  "dependencies": {
+    "@types/cheerio": "~0.22.31",
+    "@types/ejs": "~3.1.0",
+    "@types/fs-extra": "~9.0.13",
+    "cheerio": "~1.0.0-rc.12",
+    "colors-cli": "~1.0.28",
+    "copy-template-dir": "~1.4.0",
+    "del": "~6.1.0",
+    "fs-extra": "~11.1.0",
+    "move-file": "~2.1.0",
+    "yaml": "^2.1.3",
+    "yargs": "~17.6.0"
+  },
+  "devDependencies": {
+    "@types/csso": "^5.0.0",
+    "tsbb": "^3.7.8"
+  }
+}

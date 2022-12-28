@@ -1,0 +1,24 @@
+// https://github.com/jaywcjlove/svgtofont/blob/master/src/styles/_%7B%7Bfilename%7D%7D.css
+
+@font-face {
+  font-family: 'iconfont';
+  src: url("fonts/iconfont.woff2") format("woff2"),
+url("fonts/iconfont.woff") format("woff"),
+url('fonts/iconfont.ttf') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+*/;
+}
+
+[class^="iconfont-"], [class*=" iconfont-"] {
+  &::before {
+    font-family: 'iconfont' !important;
+    font-size: inherit;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.iconfont-demo:before { content: "\ea01"; }
+.iconfont-git-hub:before { content: "\ea02"; }
+
+$iconfont-demo: "\ea01";
+$iconfont-git-hub: "\ea02";
