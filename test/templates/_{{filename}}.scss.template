@@ -1,8 +1,4 @@
 /* Hello CSS! */
-:root {
-{{cssVars}}
-}
-
 ${{fontname}}-icons: (
 {{sassMap}}
 );

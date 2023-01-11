@@ -1,7 +1,3 @@
-:root {
-{{cssVars}}
-}
-
 ${{fontname}}-icons: (
 {{sassMap}}
 );
@@ -22,7 +18,6 @@ ${{fontname}}-icons: (
 
 @define-mixin icon $iconName, $position: before {
 	&:$(position) {
-    @mixin {{fontname}}-base-style;
     content: map-get(${{fontname}}-icons, $iconName)};
     @mixin-content;
 	}
