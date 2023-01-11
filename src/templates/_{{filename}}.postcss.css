@@ -1,0 +1,29 @@
+:root {
+{{cssVars}}
+}
+
+${{fontname}}-icons: (
+{{sassMap}}
+);
+
+@define-mixin {{fontname}}-base-style {
+	display: inline-block;
+	font-family: '{{fontname}}';
+	font-weight: normal;
+  text-transform: none;
+	line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@define-mixin icon $iconName, $position: before {
+	&:$(position) {
+    @mixin {{fontname}}-base-style;
+    content: map-get(${{fontname}}-icons, $iconName)};
+    @mixin-content;
+	}
+}

@@ -1,8 +1,8 @@
-import path from 'path';
-import fs from 'fs-extra';
-import * as YAML from 'yaml';
-import { copyTemplate } from './utils';
-import { log } from './utils/log';
+import path from "path";
+import fs from "fs-extra";
+import * as YAML from "yaml";
+import { copyTemplate } from "./utils";
+import { log } from "./utils/log";
 
 export type IconfontHelperOptions = {
   /** A value of `false` disables logging */
@@ -47,7 +47,7 @@ export type IconfontHelperOptions = {
    * Create font class name prefix, default value font name.
    * @default fontName
    */
-  classNamePrefix?: IconfontHelperOptions['fontName'];
+  classNamePrefix?: IconfontHelperOptions["fontName"];
 
   /**
    * Symbol Name Delimiter, @default `-`
@@ -61,21 +61,21 @@ export type IconfontHelperOptions = {
 };
 
 export default async (options: IconfontHelperOptions = {}) => {
-  const confPath = path.join(process.cwd(), '.iconfonthelperrc');
+  const confPath = path.join(process.cwd(), ".iconfonthelperrc");
 
   if (fs.pathExistsSync(confPath)) {
     const conf = await fs.readJson(confPath);
     options = { ...options, ...conf };
   } else {
     // load yaml config
-    const confPath = path.join(process.cwd(), '.iconfonthelperrc.yaml');
+    const confPath = path.join(process.cwd(), ".iconfonthelperrc.yaml");
     if (fs.pathExistsSync(confPath)) {
-      const conf = await YAML.parse(fs.readFileSync(confPath, 'utf-8'));
+      const conf = await YAML.parse(fs.readFileSync(confPath, "utf-8"));
       options = { ...options, ...conf };
     }
   }
 
-  const pkgPath = path.join(process.cwd(), 'package.json');
+  const pkgPath = path.join(process.cwd(), "package.json");
   if (fs.pathExistsSync(pkgPath)) {
     const pkg = require(pkgPath);
     if (pkg.iconfonthelper) {
@@ -85,32 +85,49 @@ export default async (options: IconfontHelperOptions = {}) => {
 
   if (options.log === undefined) options.log = true;
   log.disabled = !options.log;
-  if (options.logger && typeof options.logger === 'function') log.logger = options.logger;
+  if (options.logger && typeof options.logger === "function")
+    log.logger = options.logger;
 
   options.dist = options.dist || process.cwd();
   options.src = options.src || process.cwd();
-  options.fontName = options.fontName || 'iconfont';
-  options.fileName = options.fileName || 'iconfont-helper';
-  options.symbolNameDelimiter = options.symbolNameDelimiter || '-';
+  options.fontName = options.fontName || "iconfont";
+  options.fileName = options.fileName || "iconfont-helper";
+  options.symbolNameDelimiter = options.symbolNameDelimiter || "-";
   options.classNamePrefix = options.classNamePrefix || options.fontName;
 
-  const styleTemplatePath = options.styleTemplates || path.resolve(__dirname, 'templates');
+  const styleTemplatePath =
+    options.styleTemplates || path.resolve(__dirname, "templates");
 
-  const cssData = fs.readFileSync(options.src, 'utf-8');
+  const cssData = fs.readFileSync(options.src, "utf-8");
   const cssStr = cssData.toString();
-  const selectorRegex = new RegExp(`${options.classNamePrefix}-(.*):before`);
-  const selectors = cssStr.match(/\.([\w-]+:before)/g).map((x) => x.slice(1).replace(selectorRegex, '$1'));
-  const values = cssStr.match(/\s*{\s*content:\s*("([^"]+)");\s*}/g).map((x) => x.match(/:\s?(.*);/)[1]);
+  const selectorPattern = [options.classNamePrefix, "(.*)"].join(
+    options.symbolNameDelimiter
+  );
+  const selectorRegex = new RegExp(`(${selectorPattern}):before`);
+  const selectors = cssStr
+    .match(/\.([\w-]+:before)/g)
+    .map((x) => x.slice(1).replace(selectorRegex, "$1"));
+  const values = cssStr
+    .match(/\s*{\s*content:\s*("([^"]+)");\s*}/g)
+    .map((x) => x.match(/:\s?(.*);/)[1]);
 
   const result: string[][] = selectors.map((x, i) => [x, values[i]]);
+
+  const withoutPrefix = (str: string) => {
+    return str.replace(
+      options.classNamePrefix + options.symbolNameDelimiter,
+      ""
+    );
+  };
 
   try {
     // Ensures that the directory exists.
     await fs.ensureDir(options.dist);
-
     await copyTemplate(styleTemplatePath, options.dist, {
-      sassMap: '  ' + result.map((x) => x.join(': ')).join(',\n  '),
-      cssVars: '  ' + result.map((x) => `--${x[0]}: ${x[1]};`).join('\n  '),
+      sassMap:
+        "  " +
+        result.map((x) => `${withoutPrefix(x[0])}: ${x[1]}`).join(",\n  "),
+      cssVars: "  " + result.map((x) => `--${x[0]}: ${x[1]};`).join("\n  "),
       prefix: options.classNamePrefix,
       _opts: {
         fileName: options.fileName,
@@ -118,11 +135,11 @@ export default async (options: IconfontHelperOptions = {}) => {
       },
     });
   } catch (error) {
-    log.log('SvgToFont:CLI:ERR:', error);
+    log.log("IconfontHelper:CLI:ERR:", error);
   }
 };
 
 /**
  * https://github.com/Microsoft/TypeScript/issues/5565#issuecomment-155226290
  */
-module.exports = exports['default'];
+module.exports = exports["default"];

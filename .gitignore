@@ -61,6 +61,7 @@ jspm_packages/
 .vscode
 .idea
 .env
+.nvmrc
 
 *.bak
 *.tem

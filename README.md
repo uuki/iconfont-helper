@@ -4,7 +4,7 @@ style extension lib based on [svgtofont](https://github.com/jaywcjlove/svgtofont
 
 ## 概要
 
-svgtofontやその他iconfont generator系のライブラリから出力されるCSSに汎用mixinを追加するヘルパー
+svgtofont やその他 iconfont generator 系のライブラリから出力されるCSSに対し汎用的な CSS Vars及び mixin を追加するヘルパー
 
 ## 追加されるスタイル
 
@@ -17,7 +17,7 @@ svgtofontやその他iconfont generator系のライブラリから出力され�
 }
 ```
 
-### 基本スタイル（mixin用）
+### Basic style for mixin
 
 ```scss
 @mixin {{fontName}}-base-style {
@@ -35,16 +35,74 @@ svgtofontやその他iconfont generator系のライブラリから出力され�
 }
 ```
 
-### icon Mixin
+### icon mixin
 
 アイコン名、ポジション（before, after）を引数に取り、基本スタイル、@content とともに出力
 
-```scss
-@mixin icon($iconName, $position: before) {
-	&:#{$position} {
-    @include {{fontName}}-base-style;
-    content: "#{map-get(${{fontName}}-icons, $iconName)}";
-    @content;
-	}
+#### for css (vanilla)
+
+**Step 1.**
+
+```css
+@import 'path/to/dist/_{{filename}}.css';
+```
+
+**Step 2.**
+
+```css
+// e.g.
+.foo-style::before {
+  content: var(--{{prefix}}-arrow);
 }
+```
+
+#### for sass
+
+**Step 1.**
+
+```scss
+@use 'path/to/dist/_{{filename}}.scss';
+```
+
+**Step 2.**
+
+```scss
+// e.g.
+@include icon('arrow');
+// or
+@include icon('arrow', 'after') {
+  color: #333;
+  ...
+};
+```
+
+#### for postcss-mixin
+
+***Required plugins**  
+- [postcss](https://github.com/postcss/postcss)
+- [postcss-mixins](https://github.com/postcss/postcss-mixins)
+- [postcss-map-get](https://github.com/Scrum/postcss-map-get)
+- [postcss-simple-vars](https://github.com/postcss/postcss-simple-vars)
+
+```shell
+yarn add -D postcss postcss-mixins postcss-map-get postcss-simple-vars
+```
+
+**Step 1.**
+
+```css
+/* When using postcss-import */
+@import 'path/to/dist/_{{filename}}.postcss';
+```
+
+**Step 2.**
+
+```css
+/* e.g. */
+@mixin icon arrow;
+/* or */
+@mixin icon arrow, after {
+  color: #333;
+  ...
+};
 ```
