@@ -6,6 +6,29 @@ style extension lib based on [svgtofont](https://github.com/jaywcjlove/svgtofont
 
 svgtofont やその他 iconfont generator 系のライブラリから出力されるCSSに対し汎用的な CSS Vars及び mixin を追加するヘルパー
 
+## 使い方
+
+**Step 1.**
+
+```js
+import iconfontHelper from 'iconfont-helper';
+```
+
+**Step 2.**
+
+```js
+// 上記に何らかのアイコンフォント生成処理があるとする
+// ...
+await iconfontHelper({
+  src: path.resolve(process.cwd(), dist, fontName + '.css'), // 既にビルド済のアイコンフォントのCSS場所
+  dist: path.resolve(process.cwd(), dist), // ヘルパーCSSの出力先
+  // 以下はオプション（それぞれデフォルト値）
+  fontName: "iconfont", // フォント名（font-familyに使用）
+  fileName: "iconfont-helper", // ヘルパーCSSのファイル名
+  classNamePrefix: "iconfont", // 変数のプレフィックス
+});
+```
+
 ## 追加されるスタイル
 
 ### CSS Vars
